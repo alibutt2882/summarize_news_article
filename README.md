@@ -1,117 +1,236 @@
-AI Article Summarizer using CV
-This project is an intelligent article summarization system that uses Natural Language Processing (NLP) and Hugging Face Transformers to generate concise summaries from long articles or web content. It features an interactive interface built with Streamlit.
+# 📰 AI News Article Summarizer
 
-🚀 About the Project
-The application allows users to either paste text directly or provide a URL. It then extracts the article content (using web scraping if a URL is given) and processes it through a pre-trained deep learning model to produce a meaningful, abstractive summary. The goal is to quickly capture the key points of any news article or piece of text.
+<div align="center">
 
-🛠️ Built With
-This project leverages several powerful technologies:
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-Core Language: Python
+**An intelligent, AI-powered article summarizer built with Hugging Face Transformers and Streamlit.**  
+Paste any text or drop a URL — get a crisp, abstractive summary in seconds.
 
-Web Framework: Streamlit for the interactive user interface.
+[🚀 Quick Start](#️-installation--setup) · [💡 How It Works](#-how-it-works) · [📂 Project Structure](#-project-structure) · [🤝 Contributing](#-contributing)
 
-NLP & Transformers: Hugging Face Transformers library.
+</div>
 
-Summarization Model: BART (specifically the facebook/bart-large-cnn model) for abstractive text summarization.
+---
 
-Web Scraping: Beautiful Soup (bs4) to extract text from URLs.
+## ✨ Overview
 
-Deep Learning Backend: PyTorch which powers the transformer model.
+This project is an end-to-end **NLP summarization pipeline** that transforms long-form news articles into concise, readable summaries. It uses Meta's `facebook/bart-large-cnn` model — a state-of-the-art transformer trained specifically for abstractive summarization — wrapped in a clean, interactive Streamlit UI.
 
-📋 Prerequisites
-Before you begin, ensure you have the following installed:
+Whether you're keeping up with the news, doing research, or just don't have time to read a 2,000-word article, this tool extracts the key ideas and delivers them in a fraction of the time.
 
-Python: Version 3.8 or later is recommended. You can download it from python.org.
+---
 
-pip: Python package installer (usually comes with Python).
+## 🎯 Key Features
 
-⚙️ Installation and Setup
-Follow these steps to get the summarizer running on your local machine.
+- 📝 **Dual Input Mode** — Paste raw text directly or provide a news article URL
+- 🌐 **Web Scraping** — Automatically extracts article content from URLs using BeautifulSoup
+- 🤖 **Abstractive Summarization** — Uses BART to generate new, coherent sentences (not just copy-paste extracts)
+- ⚡ **Fast & Interactive** — Streamlit UI with real-time feedback
+- 🧩 **Modular Design** — Clean separation between UI (`app.py`) and summarization logic (`main.py`)
 
-Clone the repository
-Open your terminal and run:
+---
 
-bash
-git clone https://github.com/alibutt2882/summarize_news_article.git
-Navigate to the project directory
+## 🧠 How It Works
 
-bash
-cd summarize_news_article
-Create a virtual environment (Recommended)
-This helps keep dependencies required by different projects separate.
+```
+User Input (Text or URL)
+        │
+        ▼
+ ┌─────────────────┐
+ │  URL Provided?  │
+ └────────┬────────┘
+    Yes   │   No
+          │
+    ┌─────▼──────┐        ┌───────────────┐
+    │ BeautifulSoup│       │  Raw Text Used │
+    │ Web Scraper │       └───────┬────────┘
+    └─────┬───────┘               │
+          └──────────┬────────────┘
+                     ▼
+         ┌───────────────────────┐
+         │  BART Transformer     │
+         │  (bart-large-cnn)     │
+         │  Encoder → Decoder    │
+         └───────────┬───────────┘
+                     ▼
+           📄 Abstractive Summary
+```
 
-bash
-python -m venv venv
-Activate it:
+1. **Input Handling** — `app.py` captures user input via the Streamlit UI
+2. **Text Extraction** — If a URL is given, `BeautifulSoup` scrapes and parses the article body
+3. **Tokenization & Encoding** — The text is tokenized and passed to the BART encoder
+4. **Summary Generation** — The BART decoder generates an abstractive summary using beam search
+5. **Display** — The result is rendered back in the Streamlit interface
 
-On Windows: venv\Scripts\activate
+---
 
-On macOS/Linux: source venv/bin/activate
+## 🛠️ Tech Stack
 
-Install the required dependencies
-The project dependencies are listed in the requirements.txt file (you may need to create one based on the imports in the code, or check the files). The core libraries to install are:
+| Layer | Technology | Purpose |
+|---|---|---|
+| UI | [Streamlit](https://streamlit.io/) | Interactive web interface |
+| NLP Model | [Hugging Face Transformers](https://huggingface.co/docs/transformers) | Model loading & inference |
+| Summarizer | [`facebook/bart-large-cnn`](https://huggingface.co/facebook/bart-large-cnn) | Abstractive text summarization |
+| Web Scraping | [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) | Extract article text from URLs |
+| Deep Learning | [PyTorch](https://pytorch.org/) | Backend for transformer inference |
+| Language | Python 3.8+ | Core language |
 
-bash
-pip install streamlit transformers torch beautifulsoup4 requests
-(If a requirements.txt file is added later, you can simply run pip install -r requirements.txt)
+---
 
-💻 How to Use the Application
-The application is run using Streamlit.
+## 📂 Project Structure
 
-Run the Streamlit app
-From the project directory (with your virtual environment activated), execute:
-
-bash
-streamlit run app.py
-(The main application file is app.py)
-
-Interact with the Interface
-
-Your default web browser will automatically open to the local Streamlit address (usually http://localhost:8501).
-
-You will see a clean interface with options to input text directly or enter a news article URL.
-
-If you enter a URL, the app will scrape the article content.
-
-Click the "Summarize" button. The application will send the text to the BART model, which will process it (this may take a few seconds depending on your hardware) and display the generated summary.
-
-📂 Project Structure
-Here is the main structure of the project:
-
-text
+```
 summarize_news_article/
-├── app.py             # The main Streamlit application file with the UI
-├── main.py            # Likely contains the core summarization logic using Transformers
-├── .gitignore         # Specifies intentionally untracked files to ignore
-├── LICENSE            # The project's license file (MIT recommended)
-└── README.md          # This file
-🔮 How It Works (Under the Hood)
-Input Handling: The app.py script provides the UI and captures user input (text or URL).
+│
+├── app.py              # Streamlit UI — handles input, output, and user interaction
+├── main.py             # Core summarization logic using Hugging Face Transformers
+├── requirements.txt    # Project dependencies
+├── .gitignore          # Files excluded from version control
+├── LICENSE             # MIT License
+└── README.md           # Project documentation
+```
 
-Text Extraction (if URL): If a URL is provided, BeautifulSoup is used to fetch and parse the webpage, extracting the main article text.
+---
 
-Summarization: The extracted text is passed to a function (likely in main.py) that loads the facebook/bart-large-cnn model via the Hugging Face Transformers library.
+## ⚙️ Installation & Setup
 
-Model Processing: The BART model, a transformer-based encoder-decoder, processes the long text and generates an abstractive summary—meaning it creates new sentences that capture the core ideas, not just extracts key phrases.
+### Prerequisites
 
-Output: The generated summary is returned to the Streamlit interface and displayed to the user.
+- Python **3.8 or later** — [Download here](https://www.python.org/downloads/)
+- `pip` package manager (included with Python)
+- ~3 GB disk space (for the BART model, downloaded automatically on first run)
 
-🤝 Contributing
-Contributions are what make the open-source community such an amazing place to learn and create. Any contributions you make are greatly appreciated.
+---
 
-Fork the Project
+### Step 1 — Clone the Repository
 
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
+```bash
+git clone https://github.com/alibutt2882/summarize_news_article.git
+cd summarize_news_article
+```
 
-Commit your Changes (git commit -m 'Add some AmazingFeature')
+### Step 2 — Create a Virtual Environment (Recommended)
 
-Push to the Branch (git push origin feature/AmazingFeature)
+```bash
+# Create
+python -m venv venv
 
-Open a Pull Request
+# Activate — Windows
+venv\Scripts\activate
 
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
+# Activate — macOS/Linux
+source venv/bin/activate
+```
 
-📧 Contact
-Project Link: https://github.com/alibutt2882/summarize_news_article
+### Step 3 — Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install manually:
+
+```bash
+pip install streamlit transformers torch beautifulsoup4 requests
+```
+
+### Step 4 — Run the App
+
+```bash
+streamlit run app.py
+```
+
+The app will open automatically in your browser at **`http://localhost:8501`**
+
+> **⚠️ Note:** On first run, the BART model (~1.6 GB) will be downloaded automatically from Hugging Face. This only happens once and is cached locally afterwards.
+
+---
+
+## 💻 Usage
+
+1. **Launch** the app with `streamlit run app.py`
+2. **Choose your input mode:**
+   - Paste article text directly into the text box, **or**
+   - Enter a news article URL (e.g. from BBC, CNN, Reuters)
+3. **Click "Summarize"**
+4. **Read your summary** — generated in seconds
+
+---
+
+## 📦 Requirements
+
+```
+streamlit
+transformers
+torch
+beautifulsoup4
+requests
+```
+
+> If a `requirements.txt` is not present in the repo, create one with the packages above or run `pip freeze > requirements.txt` after manual installation.
+
+---
+
+## 🔮 Model Details
+
+This project uses **[`facebook/bart-large-cnn`](https://huggingface.co/facebook/bart-large-cnn)** — a fine-tuned version of BART (Bidirectional and Auto-Regressive Transformer) trained on the CNN/DailyMail news dataset.
+
+| Property | Detail |
+|---|---|
+| Model Type | Encoder-Decoder Transformer (BART) |
+| Task | Abstractive Summarization |
+| Training Data | CNN/DailyMail dataset |
+| Parameters | ~400M |
+| Max Input Length | 1024 tokens |
+
+**Abstractive** summarization means the model generates *new sentences* capturing the core meaning — not just copying sentences from the original text. This produces more natural, readable summaries.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get involved:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/your-feature-name`
+3. **Commit** your changes: `git commit -m "Add: brief description of change"`
+4. **Push** to your branch: `git push origin feature/your-feature-name`
+5. **Open** a Pull Request
+
+Please keep PRs focused and include a clear description of what was changed and why.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Add `requirements.txt` to the repository
+- [ ] Support for multiple summarization models (T5, Pegasus)
+- [ ] Adjustable summary length slider
+- [ ] Batch URL processing
+- [ ] Copy-to-clipboard button for summaries
+- [ ] Deployed demo on Streamlit Cloud
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full details.
+
+---
+
+## 👨‍💻 Author
+
+**Ali Haider Butt**  
+
+[![GitHub](https://img.shields.io/badge/GitHub-alibutt2882-181717?style=flat&logo=github)](https://github.com/alibutt2882)
+
+---
+
+<div align="center">
+  <sub>If you found this useful, consider giving it a ⭐ — it helps others discover the project!</sub>
+</div>
